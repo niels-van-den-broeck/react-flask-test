@@ -1,29 +1,22 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState } from "react";
+import api from "./api/api";
 import "./App.css";
 
 type Article = { id: number; name: string };
 
 function App() {
-  const [count, setCount] = useState(0);
   const [articles, setArticles] = useState<Article[]>([]);
 
   async function fetchHome() {
-    const responseArticles = await fetch("http://localhost:5000/", {
-      credentials: "include",
-    });
+    const { data } = await api.get("/");
 
-    console.log(await responseArticles.json());
+    console.log(await data.json());
   }
 
   async function fetchArticles() {
-    const responseArticles = await fetch("http://localhost:5000/articles", {
-      credentials: "include",
-    });
-    const dataArticles: Article[] = await responseArticles.json();
+    const { data } = await api.get<Article[]>("/articles");
 
-    setArticles(dataArticles);
+    setArticles(data);
   }
 
   return (
